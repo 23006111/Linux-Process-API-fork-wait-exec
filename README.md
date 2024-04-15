@@ -65,7 +65,7 @@ int main(void)
 
 
 
-##OUTPUT
+## OUTPUT
 ~~~
 $ ./pidcheck.o 
 The process id: 2382
@@ -131,7 +131,7 @@ exit(0);}
 
 
 
-##OUTPUT
+## OUTPUT
 ~~~
 $ ./forkcheck.o 
 I am parent, my pid is 13676
@@ -199,7 +199,7 @@ printf("Running ps with execlp. Now with path specified\n");
 
 
 
-##OUTPUT
+## OUTPUT
 ~~~
 
 $ ./execcheck2.o 
