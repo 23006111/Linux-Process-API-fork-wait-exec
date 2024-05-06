@@ -66,16 +66,9 @@ int main(void)
 
 
 ## OUTPUT
-~~~
-$ ./pidcheck.o 
-The process id: 2382
-The process id of parent function: 2258
+![2 one](https://github.com/23006111/Linux-Process-API-fork-wait-exec/assets/145981696/982ff8f8-7e11-4c1b-8613-8b10ca2d85fe)
 
-$ ps 
-  PID TTY          TIME CMD
- 2258 pts/0    00:00:00 bash
- 2392 pts/0    00:00:00 ps
-~~~
+
 
 
 
@@ -91,34 +84,32 @@ $ ps
 
 ## C Program to create new process using Linux API system calls fork() and exit()
 ~~~
-
 #include <stdio.h>
-#include<stdlib.h>
-int main()
-{ int pid; 
-pid=fork(); 
-if(pid == 0) 
-{ printf("Iam child my pid is %d\n",getpid()); 
-printf("My parent pid is:%d\n",getppid()); 
-exit(0); } 
-else{ 
-printf("I am parent, my pid is %d\n",getpid()); 
-sleep(100); 
-exit(0);} 
-}
-#include <stdio.h>
-#include<stdlib.h>
-int main()
-{ int pid; 
-pid=fork(); 
-if(pid == 0) 
-{ printf("Iam child my pid is %d\n",getpid()); 
-printf("My parent pid is:%d\n",getppid()); 
-exit(0); } 
-else{ 
-printf("I am parent, my pid is %d\n",getpid()); 
-sleep(100); 
-exit(0);} 
+#include <stdlib.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <unistd.h>
+int main() {
+    pid_t pid = fork();
+    if (pid < 0) {
+        perror("Fork failed");
+        exit(EXIT_FAILURE);
+    } else if (pid == 0) {
+        printf("This is the child process. Executing 'ls' command.\n");
+        execl("/bin/ls", "ls", "-l", NULL); // Lists files in long format
+        perror("execl failed");
+        exit(EXIT_FAILURE);
+    } else {
+        int status;
+        waitpid(pid, &status, 0); // Wait for the child to finish
+        if (WIFEXITED(status)) {
+            printf("Child process exited with status %d.\n", WEXITSTATUS(status));
+        } else {
+            printf("Child process did not exit normally.\n");
+        }
+        printf("Parent process is done.\n");
+    }
+    return 0;
 }
 ~~~
 
@@ -132,13 +123,7 @@ exit(0);}
 
 
 ## OUTPUT
-~~~
-$ ./forkcheck.o 
-I am parent, my pid is 13676
-Iam child my pid is 13677
-My parent pid is:13676
-~~~
-
+![2 SECOND](https://github.com/23006111/Linux-Process-API-fork-wait-exec/assets/145981696/44a9fcd7-9126-4ba9-9837-fbdaad93d8f7)
 
 
 
@@ -149,30 +134,34 @@ My parent pid is:13676
 
 ## C Program to execute Linux system commands using Linux API system calls exec() family
 ~~~
+#include <stdio.h>
 #include <stdlib.h>
-#include <sys/wait.h>
 #include <sys/types.h>
-int main()
-{       int status;
-        printf("Running ps with execlp\n");
-        execl("ps", "ps", "ax", NULL);
-        wait(&status);
-        if (WIFEXITED(status))
-                printf("child exited with status of %d\n", WEXITSTATUS(status));
-        else
-                puts("child did not exit successfully\n");
-        printf("Done.\n");
-printf("Running ps with execlp. Now with path specified\n");
-        execl("/bin/ps", "ps", "ax", NULL);
-        wait(&status);
-        if (WIFEXITED(status))
-                printf("child exited with status of %d\n", WEXITSTATUS(status));
-        else
-                puts("child did not exit successfully\n");
-        printf("Done.\n");
-        exit(0);}
+#include <sys/wait.h>
+#include <unistd.h>
+int main() {
+    pid_t pid = fork();
+    if (pid < 0) {
+        perror("Fork failed");
+        exit(EXIT_FAILURE);
+    } else if (pid == 0) {
+        printf("This is the child process. Executing 'ls' command.\n");
+        execl("/bin/ls", "ls", "-l", NULL); // Lists files in long format
+        perror("execl failed");
+        exit(EXIT_FAILURE);
+    } else {
+        int status;
+        waitpid(pid, &status, 0); // Wait for the child to finish
+        if (WIFEXITED(status)) {
+            printf("Child process exited with status %d.\n", WEXITSTATUS(status));
+        } else {
+            printf("Child process did not exit normally.\n");
+        }
+        printf("Parent process is done.\n");
+    }
+    return 0;
+}
 ~~~
-
 
 
 
@@ -200,13 +189,7 @@ printf("Running ps with execlp. Now with path specified\n");
 
 
 ## OUTPUT
-~~~
-
-$ ./execcheck2.o 
-Running ps with execlp
-child did not exit successfully
-~~~
-
+![2 three](https://github.com/23006111/Linux-Process-API-fork-wait-exec/assets/145981696/4374b454-6248-48ea-8b08-650132cacad4)
 
 
 
